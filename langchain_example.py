@@ -160,5 +160,97 @@ def chapter7() -> None:
     print(output)
 
 
+def chapter8() -> None:
+    """
+    Chat Prompt Templates
+
+    :return: None
+    """
+
+    from langchain.chat_models import ChatOpenAI
+    from langchain import LLMChain
+    from langchain.prompts.chat import (
+        ChatPromptTemplate,
+        SystemMessagePromptTemplate,
+        HumanMessagePromptTemplate,
+    )
+
+    chat = ChatOpenAI(temperature=0)
+
+    template = "You are a helpful assistant that translates {input_language} to {output_language}."
+    system_message_prompt = SystemMessagePromptTemplate.from_template(template)
+    human_template = "{text}"
+    human_message_prompt = HumanMessagePromptTemplate.from_template(human_template)
+    chat_prompt = ChatPromptTemplate.from_messages([system_message_prompt, human_message_prompt])
+
+    chain = LLMChain(llm=chat, prompt=chat_prompt)
+    output = chain.run(input_language="English", output_language="French", text="I love programming.")
+    print(output)
+
+
+def chapter9() -> None:
+    """
+    Agents with Chat Models
+
+    :return: None
+    """
+
+    from langchain.agents import load_tools
+    from langchain.agents import initialize_agent
+    from langchain.agents import AgentType
+    from langchain.chat_models import ChatOpenAI
+    from langchain.llms import OpenAI
+
+    # First, let's load the language model we're going to use to control the agent.
+    chat = ChatOpenAI(temperature=0)
+
+    # Next, let's load some tools to use. Note that the `llm-math` tool uses an LLM, so we need to pass that in.
+    llm = OpenAI(temperature=0)
+    tools = load_tools(["serpapi", "llm-math"], llm=llm)
+
+    # Finally, let's initialize an agent with the tools, the language model, and the type of agent we want to use.
+    agent = initialize_agent(tools, chat, agent=AgentType.CHAT_ZERO_SHOT_REACT_DESCRIPTION, verbose=True)
+
+    # Now let's test it out!
+    output = agent.run("Who is Olivia Wilde's boyfriend? What is his current age raised to the 0.23 power?")
+    print(output)
+
+
+def chapter10() -> None:
+    """
+    Memory: Add State to Chains and Agents
+
+    :return: None
+    """
+
+    from langchain.prompts import (
+        ChatPromptTemplate,
+        MessagesPlaceholder,
+        SystemMessagePromptTemplate,
+        HumanMessagePromptTemplate
+    )
+    from langchain.chains import ConversationChain
+    from langchain.chat_models import ChatOpenAI
+    from langchain.memory import ConversationBufferMemory
+
+    prompt = ChatPromptTemplate.from_messages([
+        SystemMessagePromptTemplate.from_template(
+            "The following is a friendly conversation between a human and an AI. The AI is talkative and provides lots of specific details from its context. If the AI does not know the answer to a question, it truthfully says it does not know."),
+        MessagesPlaceholder(variable_name="history"),
+        HumanMessagePromptTemplate.from_template("{input}")
+    ])
+
+    llm = ChatOpenAI(temperature=0)
+    memory = ConversationBufferMemory(return_messages=True)
+    conversation = ConversationChain(memory=memory, prompt=prompt, llm=llm)
+
+    output = conversation.predict(input="Hi there!")
+    print(output)
+    output = conversation.predict(input="I'm doing well! Just having a conversation with an AI.")
+    print(output)
+    output = conversation.predict(input="Tell me about yourself.")
+    print(output)
+
+
 if __name__ == '__main__':
-    chapter7()
+    chapter10()
