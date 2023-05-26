@@ -47,7 +47,8 @@ def chapter3() -> None:
     )
     chain = LLMChain(llm=llm, prompt=prompt)
 
-    chain.run("colorful socks")
+    output = chain.run("colorful socks")
+    print(output)
 
 
 def chapter4() -> None:
@@ -71,5 +72,93 @@ def chapter4() -> None:
         "What was the high temperature in SF yesterday in Fahrenheit? What is that number raised to the .023 power?")
 
 
+def chapter5() -> None:
+    """
+    Memory: Add State to Chains and Agents
+
+    :return: None
+    """
+
+    from langchain import OpenAI, ConversationChain
+
+    llm = OpenAI(temperature=0)
+    conversation = ConversationChain(llm=llm, verbose=True)
+
+    output = conversation.predict(input="Hi there!")
+    print(output)
+    output = conversation.predict(input="I'm doing well! Just having a conversation with an AI.")
+    print(output)
+
+
+def chapter6() -> None:
+    """
+    Get Message Completions from a Chat Model
+
+    :return: None
+    """
+
+    from langchain.chat_models import ChatOpenAI
+    from langchain.schema import (
+        AIMessage,
+        HumanMessage,
+        SystemMessage
+    )
+
+    chat = ChatOpenAI(temperature=0)
+
+    chat([HumanMessage(content="Translate this sentence from English to French. I love programming.")])
+    messages = [
+        SystemMessage(content="You are a helpful assistant that translates English to French."),
+        HumanMessage(content="I love programming.")
+    ]
+    output = chat(messages)
+    print(output)
+    batch_messages = [
+        [
+            SystemMessage(content="You are a helpful assistant that translates English to French."),
+            HumanMessage(content="I love programming.")
+        ],
+        [
+            SystemMessage(content="You are a helpful assistant that translates English to French."),
+            HumanMessage(content="I love artificial intelligence.")
+        ],
+    ]
+    result = chat.generate(batch_messages)
+    print(result)
+
+    # You can recover things like token usage from this LLMResult
+    print(result.llm_output['token_usage'])
+
+
+def chapter7() -> None:
+    """
+    Chat Prompt Templates
+
+    :return: None
+    """
+
+    from langchain.chat_models import ChatOpenAI
+    from langchain.prompts.chat import (
+        ChatPromptTemplate,
+        SystemMessagePromptTemplate,
+        HumanMessagePromptTemplate,
+    )
+
+    chat = ChatOpenAI(temperature=0)
+
+    template = "You are a helpful assistant that translates {input_language} to {output_language}."
+    system_message_prompt = SystemMessagePromptTemplate.from_template(template)
+    human_template = "{text}"
+    human_message_prompt = HumanMessagePromptTemplate.from_template(human_template)
+
+    chat_prompt = ChatPromptTemplate.from_messages([system_message_prompt, human_message_prompt])
+
+    # get a chat completion from the formatted messages
+    output = chat(chat_prompt.format_prompt(input_language="English", output_language="French",
+                                   text="I love programming.").to_messages())
+
+    print(output)
+
+
 if __name__ == '__main__':
-    chapter4()
+    chapter7()
