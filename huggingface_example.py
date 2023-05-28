@@ -27,41 +27,54 @@ def get_agent(llm_type: str) -> Any:
     return agent
 
 
-def remote_execution_example():
+def remote_execution_example() -> None:
+
     agent = get_agent(llm_type="openai")
 
-    agent.run("Draw me a picture of rivers and lakes", remote=True)
+    image = agent.run("Draw me a picture of rivers and lakes", remote=True)
+    image.show()
 
-    agent.chat("Draw me a picture of rivers and lakes", remote=True)
+    image = agent.chat("Draw me a picture of rivers and lakes", remote=True)
+    image.show()
 
 
-def code_generation_example():
+def code_generation_example() -> None:
+
     agent = get_agent(llm_type="openai")
 
-    agent.run("Draw me a picture of rivers and lakes", return_code=True)
+    image = agent.run("Draw me a picture of rivers and lakes", return_code=True)
+    image.show()
 
     image_generator = load_tool("huggingface-tools/text-to-image")
-
     image = image_generator(prompt="rivers and lakes")
+    image.show()
 
 
-def chat_example():
-
-    agent = get_agent(llm_type="openai")
-    agent.chat("Generate a picture of rivers and lakes")
-    agent.chat("Transform the picture so that there is a rock in there")
-
-
-def example():
+def chat_example() -> None:
 
     agent = get_agent(llm_type="openai")
+    image = agent.chat("Generate a picture of rivers and lakes")
+    image.show()
 
-    agent.run("Draw me a picture of rivers and lakes.")
+    image = agent.chat("Transform the picture so that there is a rock in there")
+    image.show()
 
-    agent.run("Draw me a picture of the sea then transform the picture to add an island")
+
+def example() -> None:
+
+    agent = get_agent(llm_type="openai")
+
+    picture = agent.run("Draw me a picture of rivers and lakes.")
+    picture.show()
+
+    picture = agent.run("Draw me a picture of the sea then transform the picture to add an island")
+    picture.show()
 
     picture = agent.run("Generate a picture of rivers and lakes.")
+    picture.show()
+
     updated_picture = agent.run("Transform the image in `picture` to add an island to it.", picture=picture)
+    updated_picture.show()
 
 
 if __name__ == '__main__':
