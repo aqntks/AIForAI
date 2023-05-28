@@ -12,6 +12,12 @@ login(huggingface_token)
 
 
 def get_agent(llm_type: str) -> Any:
+    """
+    load the agent that matches the LLM type.
+
+    :param llm_type: large language model type
+    :return: loaded agent
+    """
 
     if llm_type == "openai":
         agent = OpenAiAgent(model="text-davinci-003", api_key=openai_key)
@@ -28,6 +34,11 @@ def get_agent(llm_type: str) -> Any:
 
 
 def remote_execution_example() -> None:
+    """
+    Remote execution
+
+    :return:  None
+    """
 
     agent = get_agent(llm_type="openai")
 
@@ -39,6 +50,11 @@ def remote_execution_example() -> None:
 
 
 def code_generation_example() -> None:
+    """
+    Code generation
+
+    :return:  None
+    """
 
     agent = get_agent(llm_type="openai")
 
@@ -51,6 +67,11 @@ def code_generation_example() -> None:
 
 
 def chat_example() -> None:
+    """
+    Chat-based execution (chat)
+
+    :return:  None
+    """
 
     agent = get_agent(llm_type="openai")
     image = agent.chat("Generate a picture of rivers and lakes")
@@ -61,6 +82,11 @@ def chat_example() -> None:
 
 
 def example() -> None:
+    """
+    Base example
+
+    :return:  None
+    """
 
     agent = get_agent(llm_type="openai")
 
