@@ -37,3 +37,4 @@ class CustomLoadHuggingFaceModelTool(BaseTool):
     async def _arun(self, query: str, run_manager: Optional[AsyncCallbackManagerForToolRun] = None) -> str:
         """Use the tool asynchronously."""
         raise NotImplementedError("custom_search does not support async")
+
