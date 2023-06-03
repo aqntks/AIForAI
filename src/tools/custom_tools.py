@@ -38,3 +38,19 @@ class CustomLoadHuggingFaceModelTool(BaseTool):
         """Use the tool asynchronously."""
         raise NotImplementedError("custom_search does not support async")
 
+
+class CustomLoadHuggingFaceDatasetTool(BaseTool):
+    name = "custom_load_huggingface_model"
+    description = "useful for when you need to load huggingface dataset"
+
+    def _run(self, query: str, run_manager: Optional[CallbackManagerForToolRun] = None) -> str:
+        """Use the tool."""
+
+        loaded_model = AutoModel.from_pretrained(query)
+
+        return loaded_model
+
+    async def _arun(self, query: str, run_manager: Optional[AsyncCallbackManagerForToolRun] = None) -> str:
+        """Use the tool asynchronously."""
+        raise NotImplementedError("custom_search does not support async")
+
