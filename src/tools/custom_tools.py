@@ -1,5 +1,5 @@
 
-from typing import Optional
+from typing import Optional, Any
 
 from langchain import SerpAPIWrapper
 from langchain.tools import BaseTool
@@ -27,7 +27,7 @@ class CustomLoadHuggingFaceModelTool(BaseTool):
     name = "custom_load_huggingface_model"
     description = "useful for when you need to load huggingface model"
 
-    def _run(self, query: str, run_manager: Optional[CallbackManagerForToolRun] = None) -> str:
+    def _run(self, query: str, run_manager: Optional[CallbackManagerForToolRun] = None) -> Any:
         """Use the tool."""
 
         loaded_model = AutoModel.from_pretrained(query)
@@ -43,7 +43,7 @@ class CustomLoadHuggingFaceDatasetTool(BaseTool):
     name = "custom_load_huggingface_model"
     description = "useful for when you need to load huggingface dataset"
 
-    def _run(self, query: str, run_manager: Optional[CallbackManagerForToolRun] = None) -> str:
+    def _run(self, query: str, run_manager: Optional[CallbackManagerForToolRun] = None) -> Any:
         """Use the tool."""
 
         loaded_model = AutoModel.from_pretrained(query)
