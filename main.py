@@ -1,5 +1,4 @@
 
-import os
 from langchain.llms import OpenAI
 from langchain.agents import initialize_agent
 from langchain.agents import AgentType
@@ -7,7 +6,8 @@ from langchain.agents import load_huggingface_tool
 from src.tools import (
     CustomSearchTool,
     CustomLoadHuggingFaceModelTool,
-    save_huggingface_model_tool
+    save_huggingface_model_tool,
+    python_tool
 )
 
 
@@ -17,14 +17,16 @@ def main():
 
     tools = [
         CustomSearchTool(),
+        python_tool(),
         hf_tool,
+        CustomLoadHuggingFaceModelTool(),
         CustomLoadHuggingFaceModelTool(),
         save_huggingface_model_tool()
     ]
 
-    agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True)
+    agent = initialize_agent(tools, llm, agent=AgentType.STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION, verbose=True)
 
-    agent.run("Please save the model that classifies dogs and cats")
+    agent.run("Please find the model that classifies dogs and cats and load model")
 
 
 if __name__ == '__main__':
