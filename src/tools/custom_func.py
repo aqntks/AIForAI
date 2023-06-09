@@ -3,11 +3,6 @@ from typing import Any
 
 from langchain.tools import tool, Tool
 from langchain.utilities import PythonREPL
-from transformers import (
-    AutoModel,
-    TrainingArguments,
-    Trainer
-)
 
 
 @tool
@@ -101,6 +96,39 @@ def load_data_collator_tool() -> Tool:
             name="load_data_collator",
             func=load_data_collator,
             description="useful for when you need to load data collator"
+    )
+
+@tool
+def load_training_arguments(query: str, args: dict) -> Any:
+    """useful for when you need to load training arguments"""
+
+    from transformers import TrainingArguments
+
+    training_args = TrainingArguments(
+        output_dir=query,
+        learning_rate=args["learning_rate"],
+        per_device_train_batch_size=args["per_device_train_batch_size"],
+        per_device_eval_batch_size=args["per_device_eval_batch_size"],
+        num_train_epochs=args["num_train_epochs"],
+        weight_decay=args["weight_decay"],
+        evaluation_strategy="epoch",
+        save_strategy="epoch",
+        load_best_model_at_end=True,
+    )
+
+    return training_args
+
+
+def load_training_arguments_tool() -> Tool:
+    """
+    return load_training_arguments Tool
+
+    :return: Tool
+    """
+    return Tool(
+            name="load_training_arguments",
+            func=load_training_arguments,
+            description="useful for when you need to load training arguments"
     )
 
 
