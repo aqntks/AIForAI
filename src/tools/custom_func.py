@@ -33,7 +33,7 @@ def save_huggingface_model_tool() -> Tool:
 
 
 @tool
-def load_tokenizer(query: str) -> str:
+def load_tokenizer(query: str) -> Any:
     """useful for when you need to load tokenizer"""
 
     from transformers import AutoTokenizer
@@ -53,6 +53,54 @@ def load_tokenizer_tool() -> Tool:
             name="load_tokenizer",
             func=load_tokenizer,
             description="useful for when you need to load tokenizer"
+    )
+
+
+@tool
+def load_data_collator(query: str) -> Any:
+    """useful for when you need to load data collator"""
+
+    from transformers import (
+        DefaultDataCollator,
+        DataCollatorWithPadding,
+        DataCollatorForSOP,
+        DataCollatorForLanguageModeling,
+        DataCollatorForTokenClassification,
+        DataCollatorForSeq2Seq,
+        DataCollatorForPermutationLanguageModeling,
+        DataCollatorForWholeWordMask,
+    )
+
+    if query.lower() == "padding":
+        data_collator = DataCollatorWithPadding
+    elif query.lower() == "sop":
+        data_collator = DataCollatorForSOP
+    elif query.lower() == "languagemodeling":
+        data_collator = DataCollatorForLanguageModeling
+    elif query.lower() == "tokenclassification":
+        data_collator = DataCollatorForTokenClassification
+    elif query.lower() == "seq2seq":
+        data_collator = DataCollatorForSeq2Seq
+    elif query.lower() == "permutationlanguagemodeling":
+        data_collator = DataCollatorForPermutationLanguageModeling
+    elif query.lower() == "wholewordmask":
+        data_collator = DataCollatorForWholeWordMask
+    else:
+        data_collator = DefaultDataCollator
+
+    return data_collator
+
+
+def load_data_collator_tool() -> Tool:
+    """
+    return load_data_collator Tool
+
+    :return: Tool
+    """
+    return Tool(
+            name="load_data_collator",
+            func=load_data_collator,
+            description="useful for when you need to load data collator"
     )
 
 
