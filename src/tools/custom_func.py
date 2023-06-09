@@ -132,6 +132,39 @@ def load_training_arguments_tool() -> Tool:
     )
 
 
+@tool
+def train_model(model: Any, training_args: Any, dataset: Any, tokenizer: Any, collator: Any) -> str:
+    """useful for when you need to train model"""
+
+    from transformers import Trainer
+
+    trainer = Trainer(
+        model=model,
+        args=training_args,
+        train_dataset=dataset["train"],
+        eval_dataset=dataset["test"],
+        tokenizer=tokenizer,
+        data_collator=collator
+    )
+
+    trainer.train()
+
+    return f"Model saved successfully."
+
+
+def train_model_tool() -> Tool:
+    """
+    return train_model Tool
+
+    :return: Tool
+    """
+    return Tool(
+            name="train_model",
+            func=train_model,
+            description="useful for when you need to train model"
+    )
+
+
 def python_tool() -> Tool:
     """
     return python Tool
